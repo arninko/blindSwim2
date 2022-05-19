@@ -84,16 +84,14 @@
         ytarget = parseFloat(document.getElementById('ytarget').value);
         
         if (navInstance) {
-          navigator.geolocation.getCurrentPosition(updateT);
+          navigator.geolocation.getCurrentPosition(updateInitCoord);
         }
-        function updateT(position) {
-          xt1 = parseFloat(position.coords.latitude);
-          yt1 = parseFloat(position.coords.longitude);
-          document.getElementById('output').innerHTML =
-          'updateT:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
-
-        }
-
+      }
+      function updateInitCoord(position) {
+        xt1 = parseFloat(position.coords.latitude);
+        yt1 = parseFloat(position.coords.longitude);
+        document.getElementById('output').innerHTML =
+        'updateT:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
         x = xtarget - xt1;
         y = ytarget - yt1;
         r = Math.sqrt(x * x + y * y);
@@ -107,130 +105,133 @@
         document.getElementById('output').innerHTML =
           'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString();
       }
-      function timerEvent() {
-        if (isStopTimer) {
-          stopTimer();
-        } else {
-          xt0 = xt1;
-          yt0 = yt1;
+		function timerEvent() {
+			if (isStopTimer) {
+			  stopTimer();
+			} else {
+				xt0 = xt1;
+				yt0 = yt1;
 
-          if (navInstance) {
-            navigator.geolocation.getCurrentPosition(updateT1);
-          }
-          function updateT1(position) {
-            xt1 = parseFloat(position.coords.latitude);
-            yt1 = parseFloat(position.coords.longitude);
-            document.getElementById('output').innerHTML =
-          'updateT1:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
-          }
+				if (navInstance) {
+					navigator.geolocation.getCurrentPosition(updateTimerCoord);
+				}
+			}
+		}
+		function updateTimerCoord(position) {
+			xt1 = parseFloat(position.coords.latitude);
+			yt1 = parseFloat(position.coords.longitude);
+			document.getElementById('output').innerHTML =
+			'updateT1:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
+
+			xt = xt1 - xt0;
+			yt = yt1 - yt0;
+			rt = Math.sqrt(xt * xt + yt * yt);
+			sinFt = yt / rt;
+			cosFt = xt / rt;
+
+			document.getElementById('output').innerHTML =
+			'startTimer:' +
+			' xt: ' +
+			xt.toString() +
+			' yt: ' +
+			yt.toString() +
+			' rt: ' +
+			rt.toString() +
+			' sinFMinusrange: ' +
+			sinFMinusrange.toString() +
+			' sinF: ' +
+			sinF.toString() +
+			' sinFPlusrange: ' +
+			sinFPlusrange.toString() +
+			' sinFt: ' +
+			sinFt.toString() +
+			' cosFMinusrange: ' +
+			cosFMinusrange.toString() +
+			' cosF: ' +
+			cosF.toString() +
+			' cosFPlusrange: ' +
+			cosFPlusrange.toString() +
+			' cosFt: ' +
+			cosFt.toString();
+
+			if (compareFtWithF(sinFt, cosFt) == 'left') {
+				if (vibInstance) {
+				  navigator.vibrate(viberLeftArray);
+				} else {
+				  document.getElementById('output').innerHTML =
+					'Left:' +
+					' sinFMinusrange: ' +
+					sinFMinusrange.toString() +
+					' sinF: ' +
+					sinF.toString() +
+					' sinFPlusrange: ' +
+					sinFPlusrange.toString() +
+					' sinFt: ' +
+					sinFt.toString() +
+					' cosFMinusrange: ' +
+					cosFMinusrange.toString() +
+					' cosF: ' +
+					cosF.toString() +
+					' cosFPlusrange: ' +
+					cosFPlusrange.toString() +
+					' cosFt: ' +
+					cosFt.toString();
+				}
+			}
+
+			if (compareFtWithF(sinFt, cosFt) == 'right') {
+				if (vibInstance) {
+				 navigator.vibrate(viberRightArray);
+				} else {
+				  document.getElementById('output').innerHTML =
+					'Right:' +
+					' sinFMinusrange: ' +
+					sinFMinusrange.toString() +
+					' sinF: ' +
+					sinF.toString() +
+					' sinFPlusrange: ' +
+					sinFPlusrange.toString() +
+					' sinFt: ' +
+					sinFt.toString() +
+					' cosFMinusrange: ' +
+					cosFMinusrange.toString() +
+					' cosF: ' +
+					cosF.toString() +
+					' cosFPlusrange: ' +
+					cosFPlusrange.toString() +
+					' cosFt: ' +
+					cosFt.toString();
+				}
+			}
 
 
-          xt = xt1 - xt0;
-          yt = yt1 - yt0;
-          rt = Math.sqrt(xt * xt + yt * yt);
-          sinFt = yt / rt;
-          cosFt = xt / rt;
-
-          document.getElementById('output').innerHTML =
-            'startTimer:' +
-            ' xt: ' +
-            xt.toString() +
-            ' yt: ' +
-            yt.toString() +
-            ' rt: ' +
-            rt.toString() +
-            ' sinFMinusrange: ' +
-            sinFMinusrange.toString() +
-            ' sinF: ' +
-            sinF.toString() +
-            ' sinFPlusrange: ' +
-            sinFPlusrange.toString() +
-            ' sinFt: ' +
-            sinFt.toString() +
-            ' cosFMinusrange: ' +
-            cosFMinusrange.toString() +
-            ' cosF: ' +
-            cosF.toString() +
-            ' cosFPlusrange: ' +
-            cosFPlusrange.toString() +
-            ' cosFt: ' +
-            cosFt.toString();
-
-          if (compareFtWithF(sinFt, cosFt) == 'left') {
-            if (vibInstance) {
-              navigator.vibrate(viberLeftArray);
-            } else {
-              document.getElementById('output').innerHTML =
-                'Left:' +
-                ' sinFMinusrange: ' +
-                sinFMinusrange.toString() +
-                ' sinF: ' +
-                sinF.toString() +
-                ' sinFPlusrange: ' +
-                sinFPlusrange.toString() +
-                ' sinFt: ' +
-                sinFt.toString() +
-                ' cosFMinusrange: ' +
-                cosFMinusrange.toString() +
-                ' cosF: ' +
-                cosF.toString() +
-                ' cosFPlusrange: ' +
-                cosFPlusrange.toString() +
-                ' cosFt: ' +
-                cosFt.toString();
-            }
-          }
-
-          if (compareFtWithF(sinFt, cosFt) == 'right') {
-            if (vibInstance) {
-             navigator.vibrate(viberRightArray);
-            } else {
-              document.getElementById('output').innerHTML =
-                'Right:' +
-                ' sinFMinusrange: ' +
-                sinFMinusrange.toString() +
-                ' sinF: ' +
-                sinF.toString() +
-                ' sinFPlusrange: ' +
-                sinFPlusrange.toString() +
-                ' sinFt: ' +
-                sinFt.toString() +
-                ' cosFMinusrange: ' +
-                cosFMinusrange.toString() +
-                ' cosF: ' +
-                cosF.toString() +
-                ' cosFPlusrange: ' +
-                cosFPlusrange.toString() +
-                ' cosFt: ' +
-                cosFt.toString();
-            }
-          }
+		}
           
 
-          function compareFtWithF(sinn, coss) {
-            if (
-              sinn < sinFMinusrange &&
-              sinn < sinFPlusrange &&
-              coss > cosFMinusrange &&
-              coss > cosFPlusrange
-            ) {
-              return 'left';
-            }
-            if (
-              sinn > sinFMinusrange &&
-              sinn > sinFPlusrange &&
-              coss < cosFMinusrange &&
-              coss < cosFPlusrange
-            ) {
-              return 'right';
-            }
-          }
-        }
-      }
-      function stopTimer() {
-        isStopTimer = true;
-        clearTimeout(timer);
-      }
+        
+		function compareFtWithF(sinn, coss) {
+			if (
+			  sinn < sinFMinusrange &&
+			  sinn < sinFPlusrange &&
+			  coss > cosFMinusrange &&
+			  coss > cosFPlusrange
+			) {
+			  return 'left';
+			}
+			if (
+			  sinn > sinFMinusrange &&
+			  sinn > sinFPlusrange &&
+			  coss < cosFMinusrange &&
+			  coss < cosFPlusrange
+			) {
+			  return 'right';
+			}
+		}
+		
+		function stopTimer() {
+		isStopTimer = true;
+		clearTimeout(timer);
+		}
     </script>
   </body>
 </html>
