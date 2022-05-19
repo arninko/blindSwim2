@@ -20,23 +20,26 @@
         viberRightArray[i] = pauseduration;
       }
 
-      var r = 1;
-      var rt = 1;
+      var r = 1.1;
+      var rt = 1.1;
 
       var xtarget = 47.4492947;
       var ytarget = 19.1162885;
 
-      var x = Math.random() * (x0 * (1 + range) - x0) + x0;
-      var y = Math.random() * (y0 * (1 + range) - y0) + y0;
+      'var x = Math.random() * (x0 * (1 + range) - x0) + x0;
+      'var y = Math.random() * (y0 * (1 + range) - y0) + y0;
 
-      var xt = Math.random() * (x0 * (1 + range) - x0) + x0;
-      var yt = Math.random() * (y0 * (1 + range) - y0) + y0;
+      var x = 1.1;
+      var y = 1.1;
 
-      var xt1 = Math.random() * (x0 * (1 + range) - x0) + x0;
-      var yt1 = Math.random() * (y0 * (1 + range) - y0) + y0;
+      var xt = 1.1;
+      var yt = 1.1;
 
-      var xt0 = Math.random() * (x0 * (1 + range) - x0) + x0;
-      var yt0 = Math.random() * (y0 * (1 + range) - y0) + y0;
+      var xt1 = 1.1;
+      var yt1 = 1.1;
+
+      var xt0 = 1.1;
+      var yt0 = 1.1;
 
       var sinRange = Math.sin(2 * Math.PI * range);
       var cosRange = Math.cos(2 * Math.PI * range);
@@ -79,7 +82,11 @@
         ytarget = parseFloat(document.getElementById('ytarget').value);
         
         if (navInstance) {
-          navInstance.getCurrentPosition(updateT);
+'          navInstance.getCurrentPosition(updateT);
+          xt1 = parseFloat(position.coords.latitude);
+          yt1 = parseFloat(position.coords.longitude);
+          document.getElementById('output').innerHTML =
+          'updateT:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
         }
         function updateT(position) {
           xt1 = parseFloat(position.coords.latitude);
@@ -110,7 +117,11 @@
           yt0 = yt1;
 
           if (navInstance) {
-           navInstance.getCurrentPosition(updateT1);
+'           navInstance.getCurrentPosition(updateT1);
+            xt1 = parseFloat(position.coords.latitude);
+            yt1 = parseFloat(position.coords.longitude);
+            document.getElementById('output').innerHTML =
+          'updateT1:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
           } 
 
           xt = xt1 - xt0;
@@ -146,7 +157,7 @@
 
           if (compareFtWithF(sinFt, cosFt) == 'left') {
             if (vibInstance) {
-              vibInstance(viberLeftArray);
+              navigator.vibrate(viberLeftArray);
             } else {
               document.getElementById('output').innerHTML =
                 'Left:' +
@@ -171,7 +182,7 @@
 
           if (compareFtWithF(sinFt, cosFt) == 'right') {
             if (vibInstance) {
-             vibInstance(viberRightArray);
+             navigator.vibrate(viberRightArray);
             } else {
               document.getElementById('output').innerHTML =
                 'Right:' +
