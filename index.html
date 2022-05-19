@@ -84,11 +84,7 @@
         ytarget = parseFloat(document.getElementById('ytarget').value);
         
         if (navInstance) {
-//          navInstance.getCurrentPosition(updateT);
-          xt1 = parseFloat(position.coords.latitude);
-          yt1 = parseFloat(position.coords.longitude);
-          document.getElementById('output').innerHTML =
-          'updateT:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
+          navigator.geolocation.getCurrentPosition(updateT);
         }
         function updateT(position) {
           xt1 = parseFloat(position.coords.latitude);
@@ -119,12 +115,15 @@
           yt0 = yt1;
 
           if (navInstance) {
-//           navInstance.getCurrentPosition(updateT1);
+            navigator.geolocation.getCurrentPosition(updateT1);
+          }
+          function updateT1(position) {
             xt1 = parseFloat(position.coords.latitude);
             yt1 = parseFloat(position.coords.longitude);
             document.getElementById('output').innerHTML =
           'updateT1:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
-          } 
+          }
+
 
           xt = xt1 - xt0;
           yt = yt1 - yt0;
@@ -207,13 +206,6 @@
             }
           }
           
-          function updateT1(position) {
-            xt1 = parseFloat(position.coords.latitude);
-            yt1 = parseFloat(position.coords.longitude);
-            document.getElementById('output').innerHTML =
-          'updateT1:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
-
-          }
 
           function compareFtWithF(sinn, coss) {
             if (
