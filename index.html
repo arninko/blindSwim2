@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <header>
+    <script>
+      var isStopTimer = false;
+      var range = 0.01;
+      var timerInterval = 5000;
+      var viberleftfreq = 2;
+      var viberrightfreq = 1;
+      var viberduration = 500;
+      var pauseduration = 250;
+      const viberLeftArray = [];
+      for (i = 1; i <= viberleftfreq * 2; i = i + 2) {
+        viberLeftArray[i - 1] = viberduration;
+        viberLeftArray[i] = pauseduration;
+      }
+      const viberRightArray = [];
+      for (i = 1; i <= viberrightfreq * 2; i = i + 2) {
+        viberRightArray[i - 1] = viberduration;
+        viberRightArray[i] = pauseduration;
+      }
+
+      var r = 1;
+      var rt = 1;
+
+      var x0 = 47.4492947;
+      var y0 = 19.1162885;
+
+      var x = Math.random() * (x0 * (1 + range) - x0) + x0;
+      var y = Math.random() * (y0 * (1 + range) - y0) + y0;
+
+      var xt = Math.random() * (x0 * (1 + range) - x0) + x0;
+      var yt = Math.random() * (y0 * (1 + range) - y0) + y0;
+
+      var xt1 = Math.random() * (x0 * (1 + range) - x0) + x0;
+      var yt1 = Math.random() * (y0 * (1 + range) - y0) + y0;
+
+      var xt0 = Math.random() * (x0 * (1 + range) - x0) + x0;
+      var yt0 = Math.random() * (y0 * (1 + range) - y0) + y0;
+
+      var sinRange = Math.sin(2 * Math.PI * range);
+      var cosRange = Math.cos(2 * Math.PI * range);
+
+      var sinF = 1;
+      var cosF = 1;
+      var sinFt = 1;
+      var cosFt = 1;
+      var sinFMinusrange = 1;
+      var sinFPlusrange = 1;
+      var cosFMinusrange = 1;
+      var cosFPlusrange = 1;
+    </script>
+  </header>
+
+  <body>
+    <h1>Blind Swim</h1>
+    <a href="https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onclick_html">
+      https://www.w3schools.com/jsref/tryit.asp?filename=tryjsref_onclick_html
+    </a>
+
+    <p>Latitude of target:</p>
+    <input id="x0" value="47.44929470" />
+    <br />
+    <p>Longitude of target:</p>
+    <input id="y0" value="19.11628850" />
+    <br />
+
+    <button onclick="startJS()">Click to start</button>
+    <button onclick="stopTimer()">Click to stop</button>
+    <p>Output:</p>
+    <p id="output"></p>
+
+    <script>
+      function startJS() {
+        init();
+        timer = setTimeout(timerEvent, timerInterval);
+      }
+      function updateT1(position) {
+        xt1 = position.coords.latitude;
+        yt1 = position.coords.longitude;
+      }
+      function init() {
+        x0 = document.getElementById('x0').value;
+        y0 = document.getElementById('y0').value;
+
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(updateT1);
+        } else {
+          xt1 = Math.random() * (x0 * (1 + range) - x0) + x0;
+          yt1 = Math.random() * (y0 * (1 + range) - y0) + y0;
+        }
+
+        x = x0 - xt1;
+        y = y0 - yt1;
+        r = Math.sqrt(x * x + y * y);
+        sinF = y / r;
+        cosF = x / r;
+        sinFMinusrange = sinF * cosRange - cosF * sinRange;
+        sinFPlusrange = sinF * cosRange + cosF * sinRange;
+        cosFMinusrange = cosF * cosRange + sinF * sinRange;
+        cosFPlusrange = cosF * cosRange - sinF * sinRange;
+
+        document.getElementById('output').innerHTML =
+          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString();
+      }
+      function timerEvent() {
+        if (isStopTimer) {
+          stopTimer();
+        } else {
+          xt0 = xt1;
+          yt0 = yt1;
+
+          if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(updateT1);
+          } else {
+            xt1 = Math.random() * (x0 * (1 + range) - x0) + x0;
+            yt1 = Math.random() * (y0 * (1 + range) - y0) + y0;
+          }
+
+          xt = xt1 - xt0;
+          yt = yt1 - yt0;
+          rt = Math.sqrt(xt * xt + yt * yt);
+          sinFt = yt / rt;
+          cosFt = xt / rt;
+
+          document.getElementById('output').innerHTML =
+            'startTimer:' +
+            ' xt: ' +
+            xt.toString() +
+            ' yt: ' +
+            yt.toString() +
+            ' rt: ' +
+            rt.toString() +
+            ' sinFMinusrange: ' +
+            sinFMinusrange.toString() +
+            ' sinF: ' +
+            sinF.toString() +
+            ' sinFPlusrange: ' +
+            sinFPlusrange.toString() +
+            ' sinFt: ' +
+            sinFt.toString() +
+            ' cosFMinusrange: ' +
+            cosFMinusrange.toString() +
+            ' cosF: ' +
+            cosF.toString() +
+            ' cosFPlusrange: ' +
+            cosFPlusrange.toString() +
+            ' cosFt: ' +
+            cosFt.toString();
+
+          if (compareFtWithF(sinFt, cosFt) == 'left') {
+            if (navigator.vibrate) {
+              navigator.vibrate(viberLeftArray);
+            } else {
+              document.getElementById('output').innerHTML =
+                'Left:' +
+                ' sinFMinusrange: ' +
+                sinFMinusrange.toString() +
+                ' sinF: ' +
+                sinF.toString() +
+                ' sinFPlusrange: ' +
+                sinFPlusrange.toString() +
+                ' sinFt: ' +
+                sinFt.toString() +
+                ' cosFMinusrange: ' +
+                cosFMinusrange.toString() +
+                ' cosF: ' +
+                cosF.toString() +
+                ' cosFPlusrange: ' +
+                cosFPlusrange.toString() +
+                ' cosFt: ' +
+                cosFt.toString();
+            }
+          }
+
+          if (compareFtWithF(sinFt, cosFt) == 'right') {
+            if (navigator.vibrate) {
+              navigator.vibrate(viberRightArray);
+            } else {
+              document.getElementById('output').innerHTML =
+                'Right:' +
+                ' sinFMinusrange: ' +
+                sinFMinusrange.toString() +
+                ' sinF: ' +
+                sinF.toString() +
+                ' sinFPlusrange: ' +
+                sinFPlusrange.toString() +
+                ' sinFt: ' +
+                sinFt.toString() +
+                ' cosFMinusrange: ' +
+                cosFMinusrange.toString() +
+                ' cosF: ' +
+                cosF.toString() +
+                ' cosFPlusrange: ' +
+                cosFPlusrange.toString() +
+                ' cosFt: ' +
+                cosFt.toString();
+            }
+          }
+
+          function compareFtWithF(sinn, coss) {
+            if (
+              sinn < sinFMinusrange &&
+              sinn < sinFPlusrange &&
+              coss > cosFMinusrange &&
+              coss > cosFPlusrange
+            ) {
+              return 'left';
+            }
+            if (
+              sinn > sinFMinusrange &&
+              sinn > sinFPlusrange &&
+              coss < cosFMinusrange &&
+              coss < cosFPlusrange
+            ) {
+              return 'right';
+            }
+          }
+        }
+      }
+      function stopTimer() {
+        isStopTimer = true;
+        clearTimeout(timer);
+      }
+    </script>
+  </body>
+</html>
