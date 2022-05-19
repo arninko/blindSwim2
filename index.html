@@ -77,7 +77,7 @@
     <script>
       function startJS() {
         init();
-        timer = setTimeout(timerEvent, timerInterval);
+        timer = setInterval(timerEvent, timerInterval);
       }
       function init() {
         xtarget = parseFloat(document.getElementById('xtarget').value);
@@ -230,7 +230,7 @@
 		
 		function stopTimer() {
 		isStopTimer = true;
-		clearTimeout(timer);
+		clearInterval(timer);
 		}
     </script>
   </body>
