@@ -22,8 +22,8 @@
       }
       const viberBackwardArray = [];
       for (i = 1; i <= viberbackwardfreq * 2; i = i + 2) {
-        viberRightArray[i - 1] = viberduration;
-        viberRightArray[i] = pauseduration;
+        viberBackwardArray[i - 1] = viberduration;
+        viberBackwardArray[i] = pauseduration;
       }
 
       var r = 1.1;
@@ -46,8 +46,6 @@
       var xt1 = 1.1;
       var yt1 = 1.1;
 
-      var xt0 = 1.1;
-      var yt0 = 1.1;
 
       var sinRange = Math.sin(2 * Math.PI * range);
       var cosRange = Math.cos(2 * Math.PI * range);
@@ -56,10 +54,10 @@
       var cosF = 1;
       var sinFt = 1;
       var cosFt = 1;
-      var sinFMinusrange = 1;
-      var sinFPlusrange = 1;
-      var cosFMinusrange = 1;
-      var cosFPlusrange = 1;
+      var sinFMinusrange = 1.1;
+      var sinFPlusrange = 1.1;
+      var cosFMinusrange = 1.1;
+      var cosFPlusrange = 1.1;
       
       var navInstance = navigator.geolocation;
       var vibInstance = navigator.vibrate;
@@ -75,7 +73,7 @@
     <input id="ytarget" value="17.649295" />
     <br />
     <p>Range:</p>
-    <input id="range" value="0.01" />
+    <input id="range" value="0.0001" />
     <br />
 
     <button onclick="startJS()">Click to start</button>
@@ -113,7 +111,7 @@
         cosFPlusrange = cosF * cosRange - sinF * sinRange;
 
         document.getElementById('output').innerHTML =
-          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString() + ' asinF:' + Math.asin(sinF) + ' acosF:' + Math.acos(cosF);
+          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString();
       }
 	function timerEvent() {
 		if (isStopTimer) {
@@ -138,15 +136,9 @@
 		cosFt = xt / rt;
 
 		document.getElementById('output').innerHTML =
-		'startTimer:' +
-		' r: ' +
-		r.toString() +
-		' rt: ' +
-		rt.toString() +
-		' asinF:' + Math.asin(sinF)+ 
-		' acosF:' + Math.acos(cosF)+
-		' asinFt:' + Math.asin(sinFt) + 
-		' acosFt:' + Math.acos(cosFt);
+		'startTimer:' 
+		+ '</br> x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString();
+		+ '</br> xt: ' + xt.toString() + ' yt: ' + yt.toString() + ' rt: ' + rt.toString();
 			
 		if (vibInstance) {
 			if (compareRtWithR(rt) == 'backward') {
@@ -169,74 +161,40 @@
 	function compareFtWithF(sinn, coss) {
 		//[Ftraget between 0 to PI/2: sinF>0 increasing and cosF>0 decreasing]
 		if (
-		    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
-		    &&(sinn<sinF)&&(coss>cosF)
+		    (sinFMinusrange>=0)&&(cosFMinusrange<=1)
+		    &&(sinn<sinFMinusrange)&&(coss>cosFMinusrange)
 		   ){return "left";}
 		if (
-		    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
-		    &&(sinn>sinF)&&(coss<cosF)
+		    (sinFPlusrange<=1)&&(cosFPlusrange>=0)
+		    &&(sinn>sinFPlusrange)&&(coss<cosFPlusrange)
 		   ){return "right";}
-		if (
-		    (sinF==0)&&(cosF==1)
-		    &&(sinn<sinF)&&(coss<cosF)
-		   ){return "left";}
-		if (
-		    (sinF==0)&&(cosF==1)
-		    &&(sinn>sinF)&&(coss<cosF)
-		   ){return "right";}
-
 		//[Ftraget between PI/2 to PI: sinF>0 decreasing and cosF<0 decreasing]
 		if (
-		    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
-		    &&(sinn>sinF)&&(coss>cosF)
+		    (sinFMinusrange<=1)&&(cosFMinusrange<=0)
+		    &&(sinn>sinFMinusrange)&&(coss>cosFMinusrange)
 		   ){return "left";}
 		if (
-		    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
-		    &&(sinn<sinF)&&(coss<cosF)
-		   ){return "right";}
-		if (
-		    (sinF==1)&&(cosF==0)
-		    &&(sinn<sinF)&&(coss>cosF)
-		   ){return "left";}
-		if (
-		    (sinF==1)&&(cosF==0)
-		    &&(sinn<sinF)&&(coss<cosF)
+		    (sinFPlusrange>=0)&&(cosFPlusrange>=-1)
+		    &&(sinn<sinFPlusrange)&&(coss<cosFPlusrange)
 		   ){return "right";}
 
 		//[Ftraget between PI to 3PI/2 : sinF<0 decreasing and cosF<0 increasing]
 		if (
-		    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
-		    &&(sinn>sinF)&&(coss<cosF)
+		    (sinFMinusrange<=0)&&(cosFMinusrange>=-1)
+		    &&(sinn>sinFMinusrange)&&(coss<cosFMinusrange)
 		   ){return "left";}
 		if (
-		    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
-		    &&(sinn<sinF)&&(coss>cosF)
+		    (sinFPlusrange>=-1)&&(cosFPlusrange<=0)
+		    &&(sinn<sinFPlusrange)&&(coss>cosFPlusrange)
 		   ){return "right";}
-		if (
-		    (sinF==0)&&(cosF==-1)
-		    &&(sinn>sinF)&&(coss>cosF)
-		   ){return "left";}
-		if (
-		    (sinF==0)&&(cosF==-1)
-		    &&(sinn<sinF)&&(coss>cosF)
-		   ){return "right";}
-
 		//[Ftraget between 3PI/2 to 2PI : sinF<0 increasing and cosF>0 increasing]
 		if (
-		    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
-		    &&(sinn<sinF)&&(coss<cosF)
+		    (sinFMinusrange>=-1)&&(cosFMinusrange>=0)
+		    &&(sinn<sinFMinusrange)&&(coss<cosFMinusrange)
 		   ){return "left";}
 		if (
-		    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
-		    &&(sinn>sinF)&&(coss>cosF)
-		   ){return "right";}
-		if (
-		    (sinF==-1)&&(cosF==0)
-		    &&(sinn>sinF)&&(coss<cosF)
-		   ){return "left";}
-		if (
-		    (sinF==-1)&&(cosF==0)
-		    &&(sinn>sinF)&&(coss>cosF)
+		    (sinFPlusrange<=0)&&(cosFPlusrange<=1)
+		    &&(sinn>sinFPlusrange)&&(coss>cosFPlusrange)
 		   ){return "right";}
 	}
 	function compareRtWithR(rr) {
