@@ -153,8 +153,12 @@
 			  navigator.vibrate(viberBackwardArray);
 			}else{
 				switch(compareFtWithF(sinFt, cosFt) {
-					case 'left': navigator.vibrate(viberLeftArray);
-					case 'right': navigator.vibrate(viberRightArray);
+					case 'left': 
+						navigator.vibrate(viberLeftArray);
+						break;
+					case 'right': 
+						navigator.vibrate(viberRightArray);
+						break;
 				}		
 			}	
 		} 
