@@ -113,7 +113,7 @@
         cosFPlusrange = cosF * cosRange - sinF * sinRange;
 
         document.getElementById('output').innerHTML =
-          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString() + ' asinF:' + Math.asin(sinF)*2 * Math.PI + ' acosF:' + Math.acos(cosF)*2 * Math.PI ;
+          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString() + ' asinF:' + Math.asin(sinF) + ' acosF:' + Math.acos(cosF);
       }
 	function timerEvent() {
 		if (isStopTimer) {
@@ -143,127 +143,114 @@
 		r.toString() +
 		' rt: ' +
 		rt.toString() +
-		' asinF:' + Math.asin(sinF)*2 * Math.PI + 
-		' acosF:' + Math.acos(cosF)*2 * Math.PI +
-		' asinFt:' + Math.asin(sinFt)*2 * Math.PI + 
-		' acosFt:' + Math.acos(cosFt)*2 * Math.PI;
+		' asinF:' + Math.asin(sinF)+ 
+		' acosF:' + Math.acos(cosF)+
+		' asinFt:' + Math.asin(sinFt) + 
+		' acosFt:' + Math.acos(cosFt);
 			
-		if (compareRtWithR(r, rt) == 'backward') {
-			if (vibInstance) {
+		if (vibInstance) {
+			if (compareRtWithR(rt) == 'backward') {
 			  navigator.vibrate(viberBackwardArray);
-			} 
-		}else{
-			if (compareFtWithF(sinFt, cosFt) == 'left') {
-				if (vibInstance) {
-				  navigator.vibrate(viberLeftArray);
-				} 
-			}
-
-			if (compareFtWithF(sinFt, cosFt) == 'right') {
-				if (vibInstance) {
-				 navigator.vibrate(viberRightArray);
-				} 
-			}
-
-		}	
-
-
-
+			}else{
+				switch(compareFtWithF(sinFt, cosFt) {
+					case 'left': navigator.vibrate(viberLeftArray);
+					case 'right': navigator.vibrate(viberRightArray);
+				}		
+			}	
+		} 
 	}
           
 
         
-		function compareFtWithF(sinn, coss) {
-			//[Ftraget between 0 to PI/2: sinF>0 increasing and cosF>0 decreasing]
-			if (
-			    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
-			    &&(sinn<sinF)&&(coss>cosF)
-			   ){return "left";}
-			if (
-			    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
-			    &&(sinn>sinF)&&(coss<cosF)
-			   ){return "right";}
-			if (
-			    (sinF==0)&&(cosF==1)
-			    &&(sinn<sinF)&&(coss<cosF)
-			   ){return "left";}
-			if (
-			    (sinF==0)&&(cosF==1)
-			    &&(sinn>sinF)&&(coss<cosF)
-			   ){return "right";}
+	function compareFtWithF(sinn, coss) {
+		//[Ftraget between 0 to PI/2: sinF>0 increasing and cosF>0 decreasing]
+		if (
+		    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
+		    &&(sinn<sinF)&&(coss>cosF)
+		   ){return "left";}
+		if (
+		    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
+		    &&(sinn>sinF)&&(coss<cosF)
+		   ){return "right";}
+		if (
+		    (sinF==0)&&(cosF==1)
+		    &&(sinn<sinF)&&(coss<cosF)
+		   ){return "left";}
+		if (
+		    (sinF==0)&&(cosF==1)
+		    &&(sinn>sinF)&&(coss<cosF)
+		   ){return "right";}
 
-			//[Ftraget between PI/2 to PI: sinF>0 decreasing and cosF<0 decreasing]
-			if (
-			    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
-			    &&(sinn>sinF)&&(coss>cosF)
-			   ){return "left";}
-			if (
-			    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
-			    &&(sinn<sinF)&&(coss<cosF)
-			   ){return "right";}
-			if (
-			    (sinF==1)&&(cosF==0)
-			    &&(sinn<sinF)&&(coss>cosF)
-			   ){return "left";}
-			if (
-			    (sinF==1)&&(cosF==0)
-			    &&(sinn<sinF)&&(coss<cosF)
-			   ){return "right";}
+		//[Ftraget between PI/2 to PI: sinF>0 decreasing and cosF<0 decreasing]
+		if (
+		    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
+		    &&(sinn>sinF)&&(coss>cosF)
+		   ){return "left";}
+		if (
+		    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
+		    &&(sinn<sinF)&&(coss<cosF)
+		   ){return "right";}
+		if (
+		    (sinF==1)&&(cosF==0)
+		    &&(sinn<sinF)&&(coss>cosF)
+		   ){return "left";}
+		if (
+		    (sinF==1)&&(cosF==0)
+		    &&(sinn<sinF)&&(coss<cosF)
+		   ){return "right";}
 
-			//[Ftraget between PI to 3PI/2 : sinF<0 decreasing and cosF<0 increasing]
-			if (
-			    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
-			    &&(sinn>sinF)&&(coss<cosF)
-			   ){return "left";}
-			if (
-			    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
-			    &&(sinn<sinF)&&(coss>cosF)
-			   ){return "right";}
-			if (
-			    (sinF==0)&&(cosF==-1)
-			    &&(sinn>sinF)&&(coss>cosF)
-			   ){return "left";}
-			if (
-			    (sinF==0)&&(cosF==-1)
-			    &&(sinn<sinF)&&(coss>cosF)
-			   ){return "right";}
+		//[Ftraget between PI to 3PI/2 : sinF<0 decreasing and cosF<0 increasing]
+		if (
+		    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
+		    &&(sinn>sinF)&&(coss<cosF)
+		   ){return "left";}
+		if (
+		    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
+		    &&(sinn<sinF)&&(coss>cosF)
+		   ){return "right";}
+		if (
+		    (sinF==0)&&(cosF==-1)
+		    &&(sinn>sinF)&&(coss>cosF)
+		   ){return "left";}
+		if (
+		    (sinF==0)&&(cosF==-1)
+		    &&(sinn<sinF)&&(coss>cosF)
+		   ){return "right";}
 
-			//[Ftraget between 3PI/2 to 2PI : sinF<0 increasing and cosF>0 increasing]
-			if (
-			    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
-			    &&(sinn<sinF)&&(coss<cosF)
-			   ){return "left";}
-			if (
-			    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
-			    &&(sinn>sinF)&&(coss>cosF)
-			   ){return "right";}
-			if (
-			    (sinF==-1)&&(cosF==0)
-			    &&(sinn>sinF)&&(coss<cosF)
-			   ){return "left";}
-			if (
-			    (sinF==-1)&&(cosF==0)
-			    &&(sinn>sinF)&&(coss>cosF)
-			   ){return "right";}
-
-			
+		//[Ftraget between 3PI/2 to 2PI : sinF<0 increasing and cosF>0 increasing]
+		if (
+		    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
+		    &&(sinn<sinF)&&(coss<cosF)
+		   ){return "left";}
+		if (
+		    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
+		    &&(sinn>sinF)&&(coss>cosF)
+		   ){return "right";}
+		if (
+		    (sinF==-1)&&(cosF==0)
+		    &&(sinn>sinF)&&(coss<cosF)
+		   ){return "left";}
+		if (
+		    (sinF==-1)&&(cosF==0)
+		    &&(sinn>sinF)&&(coss>cosF)
+		   ){return "right";}
+	}
+	function compareRtWithR(rr) {
+		if (r<rr)
+		{
+		  return 'backward';
 		}
-		function compareRtWithR(rr, rrt) {
-			if (rr<rrt)
-			{
-			  return 'backward';
-			}
-			if (rr>rrt)
-			{
-			  return 'forward';
-			}
+		if (r>rr)
+		{
+		  return 'forward';
 		}
-	    
-		
-		function stopTimer() {
-		isStopTimer = true;
-		clearInterval(timer);
-		}
+	}
+
+
+	function stopTimer() {
+	isStopTimer = true;
+	clearInterval(timer);
+	}
     </script>
   </body>
 </html>
