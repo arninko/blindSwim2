@@ -20,7 +20,7 @@
         viberRightArray[i - 1] = viberduration;
         viberRightArray[i] = pauseduration;
       }
-      const viberBackwardtArray = [];
+      const viberBackwardArray = [];
       for (i = 1; i <= viberbackwardfreq * 2; i = i + 2) {
         viberRightArray[i - 1] = viberduration;
         viberRightArray[i] = pauseduration;
@@ -174,22 +174,79 @@
 
         
 		function compareFtWithF(sinn, coss) {
+			//[Ftraget between 0 to PI/2: sinF>0 increasing and cosF>0 decreasing]
 			if (
-			  sinn < sinFMinusrange &&
-			  sinn < sinFPlusrange &&
-			  coss > cosFMinusrange &&
-			  coss > cosFPlusrange
-			) {
-			  return 'left';
-			}
+			    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
+			    &&(sinn<sinF)&&(coss>cosF)
+			   ){return "left";}
 			if (
-			  sinn > sinFMinusrange &&
-			  sinn > sinFPlusrange &&
-			  coss < cosFMinusrange &&
-			  coss < cosFPlusrange
-			) {
-			  return 'right';
-			}
+			    (sinF>0)&&(sinF<1)&&(cosF<1)&&(cosF<0)
+			    &&(sinn>sinF)&&(coss<cosF)
+			   ){return "right";}
+			if (
+			    (sinF==0)&&(cosF==1)
+			    &&(sinn<sinF)&&(coss<cosF)
+			   ){return "left";}
+			if (
+			    (sinF==0)&&(cosF==1)
+			    &&(sinn>sinF)&&(coss<cosF)
+			   ){return "right";}
+
+			//[Ftraget between PI/2 to PI: sinF>0 decreasing and cosF<0 decreasing]
+			if (
+			    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
+			    &&(sinn>sinF)&&(coss>cosF)
+			   ){return "left";}
+			if (
+			    (sinF>0)&&(sinF<1)&&(cosF<0)&&(cosF>-1)
+			    &&(sinn<sinF)&&(coss<cosF)
+			   ){return "right";}
+			if (
+			    (sinF==1)&&(cosF==0)
+			    &&(sinn<sinF)&&(coss>cosF)
+			   ){return "left";}
+			if (
+			    (sinF==1)&&(cosF==0)
+			    &&(sinn<sinF)&&(coss<cosF)
+			   ){return "right";}
+
+			//[Ftraget between PI to 3PI/2 : sinF<0 decreasing and cosF<0 increasing]
+			if (
+			    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
+			    &&(sinn>sinF)&&(coss<cosF)
+			   ){return "left";}
+			if (
+			    (sinF<0)&&(sinF>-1)&&(cosF<0)&&(cosF>-1)
+			    &&(sinn<sinF)&&(coss>cosF)
+			   ){return "right";}
+			if (
+			    (sinF==0)&&(cosF==-1)
+			    &&(sinn>sinF)&&(coss>cosF)
+			   ){return "left";}
+			if (
+			    (sinF==0)&&(cosF==-1)
+			    &&(sinn<sinF)&&(coss>cosF)
+			   ){return "right";}
+
+			//[Ftraget between 3PI/2 to 2PI : sinF<0 increasing and cosF>0 increasing]
+			if (
+			    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
+			    &&(sinn<sinF)&&(coss<cosF)
+			   ){return "left";}
+			if (
+			    (sinF<0)&&(sinF>-1)&&(cosF>0)&&(cosF<1)
+			    &&(sinn>sinF)&&(coss>cosF)
+			   ){return "right";}
+			if (
+			    (sinF==-1)&&(cosF==0)
+			    &&(sinn>sinF)&&(coss<cosF)
+			   ){return "left";}
+			if (
+			    (sinF==-1)&&(cosF==0)
+			    &&(sinn>sinF)&&(coss>cosF)
+			   ){return "right";}
+
+			
 		}
 		function compareRtWithR(rr, rrt) {
 			if (rr<rrt)
