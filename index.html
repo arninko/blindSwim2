@@ -7,6 +7,7 @@
       var timerInterval = 5000;
       var viberleftfreq = 2;
       var viberrightfreq = 1;
+      var viberbackwardfreq = 5;
       var viberduration = 500;
       var pauseduration = 250;
       const viberLeftArray = [];
@@ -16,6 +17,11 @@
       }
       const viberRightArray = [];
       for (i = 1; i <= viberrightfreq * 2; i = i + 2) {
+        viberRightArray[i - 1] = viberduration;
+        viberRightArray[i] = pauseduration;
+      }
+      const viberBackwardtArray = [];
+      for (i = 1; i <= viberbackwardfreq * 2; i = i + 2) {
         viberRightArray[i - 1] = viberduration;
         viberRightArray[i] = pauseduration;
       }
@@ -107,7 +113,7 @@
         cosFPlusrange = cosF * cosRange - sinF * sinRange;
 
         document.getElementById('output').innerHTML =
-          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString() + ' asinF:' + Math.asin(sinF)*2 * Math.PI + ' acosF:' + Math.acos(sinF)*2 * Math.PI ;
+          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString() + ' asinF:' + Math.asin(sinF)*2 * Math.PI + ' acosF:' + Math.acos(cosF)*2 * Math.PI ;
       }
 	function timerEvent() {
 		if (isStopTimer) {
@@ -133,66 +139,34 @@
 
 		document.getElementById('output').innerHTML =
 		'startTimer:' +
-		' xt: ' +
-		xt.toString() +
-		' yt: ' +
-		yt.toString() +
+		' r: ' +
+		r.toString() +
 		' rt: ' +
 		rt.toString() +
 		' asinF:' + Math.asin(sinF)*2 * Math.PI + 
-		' acosF:' + Math.acos(sinF)*2 * Math.PI +
+		' acosF:' + Math.acos(cosF)*2 * Math.PI +
 		' asinFt:' + Math.asin(sinFt)*2 * Math.PI + 
-		' acosFt:' + Math.acos(sinFt)*2 * Math.PI;
+		' acosFt:' + Math.acos(cosFt)*2 * Math.PI;
 			
-		if (compareFtWithF(sinFt, cosFt) == 'left') {
+		if (compareRtWithR(r, rt) == 'backward') {
 			if (vibInstance) {
-			  navigator.vibrate(viberLeftArray);
-			} else {
-			  document.getElementById('output').innerHTML =
-				'Left:' +
-				' sinFMinusrange: ' +
-				sinFMinusrange.toString() +
-				' sinF: ' +
-				sinF.toString() +
-				' sinFPlusrange: ' +
-				sinFPlusrange.toString() +
-				' sinFt: ' +
-				sinFt.toString() +
-				' cosFMinusrange: ' +
-				cosFMinusrange.toString() +
-				' cosF: ' +
-				cosF.toString() +
-				' cosFPlusrange: ' +
-				cosFPlusrange.toString() +
-				' cosFt: ' +
-				cosFt.toString();
+			  navigator.vibrate(viberBackwardArray);
+			} 
+		}else{
+			if (compareFtWithF(sinFt, cosFt) == 'left') {
+				if (vibInstance) {
+				  navigator.vibrate(viberLeftArray);
+				} 
 			}
-		}
 
-		if (compareFtWithF(sinFt, cosFt) == 'right') {
-			if (vibInstance) {
-			 navigator.vibrate(viberRightArray);
-			} else {
-			  document.getElementById('output').innerHTML =
-				'Right:' +
-				' sinFMinusrange: ' +
-				sinFMinusrange.toString() +
-				' sinF: ' +
-				sinF.toString() +
-				' sinFPlusrange: ' +
-				sinFPlusrange.toString() +
-				' sinFt: ' +
-				sinFt.toString() +
-				' cosFMinusrange: ' +
-				cosFMinusrange.toString() +
-				' cosF: ' +
-				cosF.toString() +
-				' cosFPlusrange: ' +
-				cosFPlusrange.toString() +
-				' cosFt: ' +
-				cosFt.toString();
+			if (compareFtWithF(sinFt, cosFt) == 'right') {
+				if (vibInstance) {
+				 navigator.vibrate(viberRightArray);
+				} 
 			}
-		}
+
+		}	
+
 
 
 	}
@@ -217,6 +191,17 @@
 			  return 'right';
 			}
 		}
+		function compareRtWithR(rr, rrt) {
+			if (rr<rrt)
+			) {
+			  return 'backward';
+			}
+			if ((rr>rrt)
+			) {
+			  return 'forward';
+			}
+		}
+	    
 		
 		function stopTimer() {
 		isStopTimer = true;
