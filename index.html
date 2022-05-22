@@ -63,10 +63,13 @@
   <body>
     <h1>Blind Swim</h1>
     <p>Latitude of target:</p>
-    <input id="xtarget" value="47.44929470" />
+    <input id="xtarget" value="46.781753" />
     <br />
     <p>Longitude of target:</p>
-    <input id="ytarget" value="19.11628850" />
+    <input id="ytarget" value="17.649295" />
+    <br />
+    <p>Range:</p>
+    <input id="range" value="0.01" />
     <br />
 
     <button onclick="startJS()">Click to start</button>
@@ -82,6 +85,7 @@
       function init() {
         xtarget = parseFloat(document.getElementById('xtarget').value);
         ytarget = parseFloat(document.getElementById('ytarget').value);
+        range = parseFloat(document.getElementById('range').value);
         
         if (navInstance) {
           navigator.geolocation.getCurrentPosition(updateInitCoord);
@@ -103,109 +107,95 @@
         cosFPlusrange = cosF * cosRange - sinF * sinRange;
 
         document.getElementById('output').innerHTML =
-          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString();
+          'init:' + ' x: ' + x.toString() + ' y: ' + y.toString() + ' r: ' + r.toString() + ' asinF:' + Math.asin(sinF)*2 * Math.PI + ' acosF:' + Math.acos(sinF)*2 * Math.PI ;
       }
-		function timerEvent() {
-			if (isStopTimer) {
-			  stopTimer();
+	function timerEvent() {
+		if (isStopTimer) {
+		  stopTimer();
+		} else {
+			xt0 = xt1;
+			yt0 = yt1;
+
+			if (navInstance) {
+				navigator.geolocation.getCurrentPosition(updateTimerCoord);
+			}
+		}
+	}
+	function updateTimerCoord(position) {
+		xt1 = parseFloat(position.coords.latitude);
+		yt1 = parseFloat(position.coords.longitude);
+
+		xt = xtarget - xt1;
+		yt = ytarget - yt1;
+		rt = Math.sqrt(xt * xt + yt * yt);
+		sinFt = yt / rt;
+		cosFt = xt / rt;
+
+		document.getElementById('output').innerHTML =
+		'startTimer:' +
+		' xt: ' +
+		xt.toString() +
+		' yt: ' +
+		yt.toString() +
+		' rt: ' +
+		rt.toString() +
+		' asinF:' + Math.asin(sinF)*2 * Math.PI + 
+		' acosF:' + Math.acos(sinF)*2 * Math.PI +
+		' asinFt:' + Math.asin(sinFt)*2 * Math.PI + 
+		' acosFt:' + Math.acos(sinFt)*2 * Math.PI;
+			
+		if (compareFtWithF(sinFt, cosFt) == 'left') {
+			if (vibInstance) {
+			  navigator.vibrate(viberLeftArray);
 			} else {
-				xt0 = xt1;
-				yt0 = yt1;
-
-				if (navInstance) {
-					navigator.geolocation.getCurrentPosition(updateTimerCoord);
-				}
+			  document.getElementById('output').innerHTML =
+				'Left:' +
+				' sinFMinusrange: ' +
+				sinFMinusrange.toString() +
+				' sinF: ' +
+				sinF.toString() +
+				' sinFPlusrange: ' +
+				sinFPlusrange.toString() +
+				' sinFt: ' +
+				sinFt.toString() +
+				' cosFMinusrange: ' +
+				cosFMinusrange.toString() +
+				' cosF: ' +
+				cosF.toString() +
+				' cosFPlusrange: ' +
+				cosFPlusrange.toString() +
+				' cosFt: ' +
+				cosFt.toString();
 			}
 		}
-		function updateTimerCoord(position) {
-			xt1 = parseFloat(position.coords.latitude);
-			yt1 = parseFloat(position.coords.longitude);
-			document.getElementById('output').innerHTML =
-			'updateT1:' + ' xt1: ' + xt1.toString() + ' yt1: ' + yt1.toString();
 
-			xt = xt1 - xt0;
-			yt = yt1 - yt0;
-			rt = Math.sqrt(xt * xt + yt * yt);
-			sinFt = yt / rt;
-			cosFt = xt / rt;
-
-			document.getElementById('output').innerHTML =
-			'startTimer:' +
-			' xt: ' +
-			xt.toString() +
-			' yt: ' +
-			yt.toString() +
-			' rt: ' +
-			rt.toString() +
-			' sinFMinusrange: ' +
-			sinFMinusrange.toString() +
-			' sinF: ' +
-			sinF.toString() +
-			' sinFPlusrange: ' +
-			sinFPlusrange.toString() +
-			' sinFt: ' +
-			sinFt.toString() +
-			' cosFMinusrange: ' +
-			cosFMinusrange.toString() +
-			' cosF: ' +
-			cosF.toString() +
-			' cosFPlusrange: ' +
-			cosFPlusrange.toString() +
-			' cosFt: ' +
-			cosFt.toString();
-
-			if (compareFtWithF(sinFt, cosFt) == 'left') {
-				if (vibInstance) {
-				  navigator.vibrate(viberLeftArray);
-				} else {
-				  document.getElementById('output').innerHTML =
-					'Left:' +
-					' sinFMinusrange: ' +
-					sinFMinusrange.toString() +
-					' sinF: ' +
-					sinF.toString() +
-					' sinFPlusrange: ' +
-					sinFPlusrange.toString() +
-					' sinFt: ' +
-					sinFt.toString() +
-					' cosFMinusrange: ' +
-					cosFMinusrange.toString() +
-					' cosF: ' +
-					cosF.toString() +
-					' cosFPlusrange: ' +
-					cosFPlusrange.toString() +
-					' cosFt: ' +
-					cosFt.toString();
-				}
+		if (compareFtWithF(sinFt, cosFt) == 'right') {
+			if (vibInstance) {
+			 navigator.vibrate(viberRightArray);
+			} else {
+			  document.getElementById('output').innerHTML =
+				'Right:' +
+				' sinFMinusrange: ' +
+				sinFMinusrange.toString() +
+				' sinF: ' +
+				sinF.toString() +
+				' sinFPlusrange: ' +
+				sinFPlusrange.toString() +
+				' sinFt: ' +
+				sinFt.toString() +
+				' cosFMinusrange: ' +
+				cosFMinusrange.toString() +
+				' cosF: ' +
+				cosF.toString() +
+				' cosFPlusrange: ' +
+				cosFPlusrange.toString() +
+				' cosFt: ' +
+				cosFt.toString();
 			}
-
-			if (compareFtWithF(sinFt, cosFt) == 'right') {
-				if (vibInstance) {
-				 navigator.vibrate(viberRightArray);
-				} else {
-				  document.getElementById('output').innerHTML =
-					'Right:' +
-					' sinFMinusrange: ' +
-					sinFMinusrange.toString() +
-					' sinF: ' +
-					sinF.toString() +
-					' sinFPlusrange: ' +
-					sinFPlusrange.toString() +
-					' sinFt: ' +
-					sinFt.toString() +
-					' cosFMinusrange: ' +
-					cosFMinusrange.toString() +
-					' cosF: ' +
-					cosF.toString() +
-					' cosFPlusrange: ' +
-					cosFPlusrange.toString() +
-					' cosFt: ' +
-					cosFt.toString();
-				}
-			}
-
-
 		}
+
+
+	}
           
 
         
